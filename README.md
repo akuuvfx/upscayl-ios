@@ -159,7 +159,7 @@ Améliorations prévues, classées par priorité. Les éléments déjà livrés 
 - ✅ Version unique (`MARKETING_VERSION` dans `project.yml`, lue depuis le bundle).
 - ✅ Manifeste de confidentialité (`PrivacyInfo.xcprivacy`).
 - ⬜ Tests unitaires (tuiles, TTA, version, préférences) et tests d'image de référence.
-- ⬜ Build sur chaque pull request et publication uniquement depuis `main`.
+- ✅ Build sur chaque pull request et publication uniquement depuis `main`.
 - ⬜ Conversion des modèles reproductible (commit Upscayl épinglé + checksums).
 
 ---

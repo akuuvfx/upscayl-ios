@@ -37,6 +37,8 @@ final class ViewModel: ObservableObject {
     @Published var eta: String?
     @Published var isRunning = false
     @Published var message: String?
+    @Published var preparing: String?
+    @Published var photosDenied = false
 
     private let upscaler = Upscaler()
     private var task: Task<Void, Never>?
@@ -102,7 +104,7 @@ final class ViewModel: ObservableObject {
             return
         }
         let jpeg = await Task.detached { () -> Data? in
-            guard let img = UIImage(data: data) else { return nil }
+            guard let img = Upscaler.decode(data, maxPixels: side * side) else { return nil }
             return ViewModel.previewJPEG(img, side: side)
         }.value
         if let i = items.firstIndex(where: { $0.id == id }) { items[i].beforeData = jpeg }
@@ -130,6 +132,8 @@ final class ViewModel: ObservableObject {
             items[i].size = nil
         }
         message = nil
+        preparing = nil
+        photosDenied = false
         progress = 0
         eta = nil
         runStart = Date()
@@ -173,6 +177,10 @@ final class ViewModel: ObservableObject {
         // Les images sont lues maintenant (app au premier plan), puis traitées même en arrière-plan
         var inputs: [URL?] = []
         for i in 0..<n {
+            if Task.isCancelled { break }
+            preparing = n > 1
+                ? "\(loc.t("Préparation", "Preparing")) \(i + 1)/\(n)"
+                : loc.t("Préparation…", "Preparing…")
             var url: URL?
             if let data = try? await items[i].picker.loadTransferable(type: Data.self) {
                 let u = FileManager.default.temporaryDirectory.appendingPathComponent("Upscayl_in_\(i)")
@@ -180,6 +188,8 @@ final class ViewModel: ObservableObject {
             }
             inputs.append(url)
         }
+        while inputs.count < n { inputs.append(nil) }
+        preparing = nil
 
         for i in 0..<n {
             if Task.isCancelled { break }
@@ -190,7 +200,9 @@ final class ViewModel: ObservableObject {
                     throw UpscaleError.badImage
                 }
                 let work = Task.detached(priority: .userInitiated) { [weak self] () throws -> ItemOutput in
-                    guard let src = UIImage(data: data) else { throw UpscaleError.badImage }
+                    guard let src = Upscaler.decode(data, maxPixels: Upscaler.maxInputPixels) else {
+                        throw UpscaleError.badImage
+                    }
                     let out = try upscaler.upscale(src, model: model, options: opts) { p in
                         Task { @MainActor in self?.setProgress(index: i, local: p, total: n) }
                     }
@@ -275,13 +287,17 @@ final class ViewModel: ObservableObject {
     private func savePhotos(_ urls: [URL]) async -> Bool {
         let status = await PHPhotoLibrary.requestAuthorization(for: .addOnly)
         guard status == .authorized || status == .limited else {
+            photosDenied = true
             message = loc.t("Accès à Photos refusé.", "Photos access denied.")
             return false
         }
+        photosDenied = false
         do {
             try await PHPhotoLibrary.shared().performChanges {
                 for u in urls {
-                    PHAssetCreationRequest.forAsset().addResource(with: .photo, fileURL: u, options: nil)
+                    let request = PHAssetCreationRequest.forAsset()
+                    request.creationDate = Date()
+                    request.addResource(with: .photo, fileURL: u, options: nil)
                 }
             }
             return true
@@ -593,18 +609,29 @@ struct UpscaleView: View {
                 if vm.isRunning {
                     Divider()
                     VStack(spacing: 6) {
-                        ProgressView(value: vm.progress).tint(theme.accent)
-                        HStack {
-                            Text(progressText)
-                                .font(.footnote).foregroundColor(.secondary)
-                            Spacer()
-                            Button(loc.t("Annuler", "Cancel"), role: .destructive) { vm.cancel() }
-                                .font(.footnote)
-                        }
-                        if #available(iOS 26.0, *) {
-                            Text(loc.t("Tu peux quitter l'app : le calcul continue.", "You can leave the app: processing continues."))
-                                .font(.caption2).foregroundColor(.secondary)
-                                .frame(maxWidth: .infinity, alignment: .leading)
+                        if let prep = vm.preparing {
+                            ProgressView().tint(theme.accent)
+                            HStack {
+                                Text(prep)
+                                    .font(.footnote).foregroundColor(.secondary)
+                                Spacer()
+                                Button(loc.t("Annuler", "Cancel"), role: .destructive) { vm.cancel() }
+                                    .font(.footnote)
+                            }
+                        } else {
+                            ProgressView(value: vm.progress).tint(theme.accent)
+                            HStack {
+                                Text(progressText)
+                                    .font(.footnote).foregroundColor(.secondary)
+                                Spacer()
+                                Button(loc.t("Annuler", "Cancel"), role: .destructive) { vm.cancel() }
+                                    .font(.footnote)
+                            }
+                            if #available(iOS 26.0, *) {
+                                Text(loc.t("Tu peux quitter l'app : le calcul continue.", "You can leave the app: processing continues."))
+                                    .font(.caption2).foregroundColor(.secondary)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
                         }
                     }
                     .padding(.vertical, 12)
@@ -666,6 +693,18 @@ struct UpscaleView: View {
             if let m = vm.message {
                 Text(m).font(.footnote).foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
+            }
+
+            if vm.photosDenied {
+                Button {
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(url)
+                    }
+                } label: {
+                    Label(loc.t("Ouvrir les Réglages", "Open Settings"),
+                          systemImage: "gearshape")
+                }
+                .buttonStyle(GlassButtonStyle())
             }
         }
     }

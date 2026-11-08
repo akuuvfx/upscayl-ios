@@ -37,7 +37,7 @@ struct AboutView: View {
                 .frame(width: 84, height: 84)
                 .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
             Text("Upscayl iOS").font(.title2.bold())
-            Text(loc.t("Fork non officiel", "Unofficial fork")).font(.subheadline).foregroundColor(.secondary)
+            Text(loc.t("Portage non officiel", "Unofficial port")).font(.subheadline).foregroundColor(.secondary)
             Text("\(loc.t("Version", "Version")) \(AppInfo.version)")
                 .font(.caption.weight(.semibold))
                 .padding(.horizontal, 10).padding(.vertical, 4)
@@ -91,6 +91,9 @@ struct AboutView: View {
                        "Akuu owns **no rights** to Upscayl, its models, its logo or its name. Everything belongs to their respective creators and rights holders listed below.")
                 .replacingOccurrences(of: "**", with: ""))
                 .foregroundColor(.secondary)
+            Text(loc.t("Le code iOS de ce projet est original : seuls les modèles d'IA sont convertis depuis les modèles publiés par Upscayl. Le code desktop d'Upscayl n'est pas embarqué.",
+                       "The iOS code in this project is original: only the AI models are converted from the models published by Upscayl. Upscayl's desktop code is not included."))
+                .foregroundColor(.secondary)
         }
         .font(.subheadline)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -117,8 +120,8 @@ struct AboutView: View {
     private var licenseCard: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text(loc.t("Licences et code source", "Licenses and source code")).font(.headline)
-            Text(loc.t("Logiciel libre sous licence AGPL-3.0 (Upscayl). Real-ESRGAN : BSD-3-Clause.",
-                       "Free software under the AGPL-3.0 license (Upscayl). Real-ESRGAN: BSD-3-Clause."))
+            Text(loc.t("Ce dépôt est distribué sous AGPL-3.0. Upscayl est sous AGPL-3.0 ; Real-ESRGAN sous BSD-3-Clause. Certains modèles sont limités à un usage non commercial.",
+                       "This repository is distributed under AGPL-3.0. Upscayl is AGPL-3.0; Real-ESRGAN is BSD-3-Clause. Some models are restricted to non-commercial use."))
                 .font(.subheadline).foregroundColor(.secondary)
             link(loc.t("Upscayl (projet original)", "Upscayl (original project)"), "https://github.com/upscayl/upscayl")
             link("Real-ESRGAN", "https://github.com/xinntao/Real-ESRGAN")
