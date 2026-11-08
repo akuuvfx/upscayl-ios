@@ -23,7 +23,7 @@
       "versionDate": "2026-11-08",
       "versionDescription": "Version 0.10.2 : décodage borné en mémoire, progression de la préparation, bouton Réglages si Photos est refusé, date de création conservée, notifications au premier plan, manifeste de confidentialité.",
       "downloadURL": "https://github.com/akuuvfx/upscayl-ios/releases/download/latest/Upscayl.ipa",
-      "size": 165637565,
+      "size": 165651336,
       "appPermissions": {
         "entitlements": [],
         "privacy": {
@@ -38,7 +38,7 @@
           "date": "2026-11-08",
           "localizedDescription": "Décodage borné en mémoire, progression de la préparation, bouton Réglages si Photos est refusé, date de création conservée, notifications au premier plan.",
           "downloadURL": "https://github.com/akuuvfx/upscayl-ios/releases/download/latest/Upscayl.ipa",
-          "size": 165637565,
+          "size": 165651336,
           "minOSVersion": "16.0"
         }
       ]
