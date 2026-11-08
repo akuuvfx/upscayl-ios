@@ -8,6 +8,7 @@ struct UpscaylApp: App {
     init() {
         // Doit être fait avant la fin du lancement de l'app
         BackgroundWork.shared.registerAtLaunch()
+        Notifier.installDelegate()
     }
 
     var body: some Scene {

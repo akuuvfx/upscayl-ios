@@ -182,7 +182,22 @@ final class AppSettings: ObservableObject {
     func reset() { p = Prefs() }
 }
 
+/// Affiche aussi les notifications quand l'app est au premier plan.
+final class NotificationPresenter: NSObject, UNUserNotificationCenterDelegate {
+    static let shared = NotificationPresenter()
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.banner, .sound])
+    }
+}
+
 enum Notifier {
+    static func installDelegate() {
+        UNUserNotificationCenter.current().delegate = NotificationPresenter.shared
+    }
+
     static func requestAuthorization() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, _ in }
     }
@@ -200,6 +215,8 @@ enum Notifier {
 }
 
 enum AppInfo {
-    /// Version de l'app : 0.<mises à jour de fonctionnalités>.<correctifs>  (voir CHANGELOG.md)
-    static let version = "0.9.2"
+    /// Version de l'app, définie une seule fois dans `project.yml` (MARKETING_VERSION).
+    static var version: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.0.0"
+    }
 }

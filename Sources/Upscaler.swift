@@ -1,5 +1,6 @@
 import CoreML
 import CoreVideo
+import ImageIO
 import UIKit
 
 enum UpscaleModel: String, CaseIterable, Identifiable {
@@ -94,6 +95,7 @@ final class Upscaler {
     static let modelScale = 4
     static let pad = 12
     static let maxOutputPixels = 64_000_000   // plafond mémoire (≈256 Mo)
+    static let maxInputPixels = maxOutputPixels / (modelScale * modelScale)
 
     static let colorSpace = CGColorSpace(name: CGColorSpace.sRGB)!
     static let bitmapInfo: UInt32 =
@@ -179,9 +181,8 @@ final class Upscaler {
         guard var cg = Self.flattened(input) else { throw UpscaleError.badImage }
 
         var downscaled = false
-        let maxInputPixels = Self.maxOutputPixels / (k * k)
-        if cg.width * cg.height > maxInputPixels {
-            let f = (Double(maxInputPixels) / Double(cg.width * cg.height)).squareRoot()
+        if cg.width * cg.height > Self.maxInputPixels {
+            let f = (Double(Self.maxInputPixels) / Double(cg.width * cg.height)).squareRoot()
             let nw = max(1, Int(Double(cg.width) * f))
             let nh = max(1, Int(Double(cg.height) * f))
             guard let r = Self.resize(cg, to: nw, nh) else { throw UpscaleError.badImage }
@@ -409,6 +410,36 @@ final class Upscaler {
     }
 
     // MARK: - Helpers
+
+    /// Décode l'image en bornant le nombre de pixels lus.
+    /// Évite de charger une photo 48 Mpx en pleine résolution juste pour la réduire ensuite.
+    static func decode(_ data: Data, maxPixels: Int) -> UIImage? {
+        guard maxPixels > 0,
+              let source = CGImageSourceCreateWithData(data as CFData, nil) else {
+            return UIImage(data: data)
+        }
+        guard let props = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any],
+              let width = props[kCGImagePropertyPixelWidth as String] as? Int,
+              let height = props[kCGImagePropertyPixelHeight as String] as? Int,
+              width > 0, height > 0 else {
+            return UIImage(data: data)
+        }
+        let pixels = width * height
+        guard pixels > maxPixels else { return UIImage(data: data) }
+
+        let ratio = (Double(maxPixels) / Double(pixels)).squareRoot()
+        let maxSide = max(1, Int(Double(max(width, height)) * ratio))
+        let options: [CFString: Any] = [
+            kCGImageSourceCreateThumbnailFromImageAlways: true,
+            kCGImageSourceCreateThumbnailWithTransform: true,
+            kCGImageSourceThumbnailMaxPixelSize: maxSide,
+            kCGImageSourceShouldCacheImmediately: true
+        ]
+        if let cg = CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary) {
+            return UIImage(cgImage: cg)
+        }
+        return UIImage(data: data)
+    }
 
     /// Applique l'orientation EXIF et renvoie un CGImage opaque en pixels réels.
     static func flattened(_ img: UIImage) -> CGImage? {

@@ -6,7 +6,7 @@ enum Lang: String, CaseIterable, Identifiable {
     var label: String { self == .fr ? "Français" : "English" }
 }
 
-/// Langue de l'app (choisie dans « À propos », mémorisée).
+/// Langue de l'app (choisie dans « Paramètres », mémorisée).
 final class Loc: ObservableObject {
     static let shared = Loc()
 
