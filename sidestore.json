@@ -1,8 +1,8 @@
 {
   "name": "Upscayl Mobile",
   "identifier": "com.akuuvfx.upscayl.source",
-  "subtitle": "Upscayl pour iOS",
-  "description": "Source AltStore / SideStore pour Upscayl iOS (version non officielle).",
+  "subtitle": "Portage non officiel d'Upscayl pour iOS",
+  "description": "Source AltStore / SideStore pour Upscayl Mobile, portage non officiel d'Upscayl pour iOS. Ce projet n'est ni affilié ni approuvé par l'équipe Upscayl.",
   "iconURL": "https://raw.githubusercontent.com/akuuvfx/upscayl-ios/main/icon.png",
   "headerURL": "https://raw.githubusercontent.com/akuuvfx/upscayl-ios/main/icon.png",
   "website": "https://github.com/akuuvfx/upscayl-ios",
@@ -10,20 +10,20 @@
   "sourceURL": "https://raw.githubusercontent.com/akuuvfx/upscayl-ios/main/sidestore.json",
   "apps": [
     {
-      "name": "Upscayl",
-      "bundleIdentifier": "com.akuuvfx.upscayl",
+      "name": "Upscayl Mobile",
+      "bundleIdentifier": "fork.upscayl.ios",
       "developerName": "akuuvfx",
-      "subtitle": "Amélioration d'images par IA",
-      "localizedDescription": "Version iOS non officielle d'Upscayl pour améliorer et agrandir des images grâce à l'intelligence artificielle.",
+      "subtitle": "Portage non officiel d'Upscayl",
+      "localizedDescription": "Portage mobile non officiel d'Upscayl pour iOS : agrandissement d'images par IA avec Core ML, traitement par lot, calcul en arrière-plan et comparaison avant / après. Projet indépendant, non affilié à l'équipe Upscayl.",
       "iconURL": "https://raw.githubusercontent.com/akuuvfx/upscayl-ios/main/icon.png",
       "tintColor": "#8B5CF6",
       "category": "photo-video",
       "screenshotURLs": [],
-      "version": "1.0.0",
-      "versionDate": "2026-10-26",
-      "versionDescription": "Première version.",
+      "version": "0.9.2",
+      "versionDate": "2026-10-29",
+      "versionDescription": "Version 0.9.2 : calcul en arrière-plan sur iOS 26, notifications de fin, barre d'onglets native, traitement par lot et comparaison avant / après.",
       "downloadURL": "https://github.com/akuuvfx/upscayl-ios/releases/download/latest/Upscayl.ipa",
-      "size": 50000000,
+      "size": 165637565,
       "appPermissions": {
         "entitlements": [],
         "privacy": {
@@ -33,12 +33,12 @@
       },
       "versions": [
         {
-          "version": "1.0.0",
-          "buildVersion": "1",
-          "date": "2026-10-26",
-          "localizedDescription": "Première version.",
+          "version": "0.9.2",
+          "buildVersion": "9",
+          "date": "2026-10-29",
+          "localizedDescription": "Calcul en arrière-plan sur iOS 26, notifications de fin, barre d'onglets native, traitement par lot.",
           "downloadURL": "https://github.com/akuuvfx/upscayl-ios/releases/download/latest/Upscayl.ipa",
-          "size": 50000000,
+          "size": 165637565,
           "minOSVersion": "16.0"
         }
       ]
