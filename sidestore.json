@@ -19,9 +19,9 @@
       "tintColor": "#8B5CF6",
       "category": "photo-video",
       "screenshotURLs": [],
-      "version": "0.9.2",
-      "versionDate": "2026-10-29",
-      "versionDescription": "Version 0.9.2 : calcul en arrière-plan sur iOS 26, notifications de fin, barre d'onglets native, traitement par lot et comparaison avant / après.",
+      "version": "0.10.2",
+      "versionDate": "2026-11-08",
+      "versionDescription": "Version 0.10.2 : décodage borné en mémoire, progression de la préparation, bouton Réglages si Photos est refusé, date de création conservée, notifications au premier plan, manifeste de confidentialité.",
       "downloadURL": "https://github.com/akuuvfx/upscayl-ios/releases/download/latest/Upscayl.ipa",
       "size": 165637565,
       "appPermissions": {
@@ -33,10 +33,10 @@
       },
       "versions": [
         {
-          "version": "0.9.2",
-          "buildVersion": "9",
-          "date": "2026-10-29",
-          "localizedDescription": "Calcul en arrière-plan sur iOS 26, notifications de fin, barre d'onglets native, traitement par lot.",
+          "version": "0.10.2",
+          "buildVersion": "10",
+          "date": "2026-11-08",
+          "localizedDescription": "Décodage borné en mémoire, progression de la préparation, bouton Réglages si Photos est refusé, date de création conservée, notifications au premier plan.",
           "downloadURL": "https://github.com/akuuvfx/upscayl-ios/releases/download/latest/Upscayl.ipa",
           "size": 165637565,
           "minOSVersion": "16.0"

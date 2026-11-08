@@ -3,23 +3,7 @@
 Numérotation : **0.A.B**, où **A** = nombre de mises à jour de fonctionnalités de l'app et **B** = nombre de correctifs.
 (Les changements qui ne touchent que le dépôt, le README ou les liens de téléchargement ne sont pas comptés.)
 
-## En cours (non publié)
-
-Améliorations sans changement de numéro de version. Elles seront intégrées à la prochaine
-version publiée.
-
-- Décodage borné en mémoire via ImageIO : une photo très haute résolution n'est plus chargée en
-  pleine taille avant d'être réduite.
-- Progression de la phase « Préparation » (lecture iCloud, écriture des fichiers temporaires).
-- Bouton « Ouvrir les Réglages » quand l'accès à Photos est refusé.
-- Date de création conservée à l'enregistrement dans Photos.
-- Notifications visibles même quand l'app est au premier plan.
-- Version lue depuis le bundle (`CFBundleShortVersionString`) au lieu d'être codée en dur.
-- Manifeste de confidentialité `PrivacyInfo.xcprivacy`.
-- CI : build sur chaque pull request, publication uniquement depuis `main`.
-- Interface : textes « portage non officiel » et licences précisés dans « À propos ».
-
-## iOS : 0.9.2 (9 mises à jour de fonctionnalités, 2 correctifs)
+## iOS : 0.10.2 (10 mises à jour de fonctionnalités, 2 correctifs)
 
 | Version | Type | Contenu |
 |---|---|---|
@@ -34,8 +18,9 @@ version publiée.
 | 0.7.2 | fonctionnalité | Option Double Upscayl |
 | 0.8.2 | fonctionnalité | Vérification de mise à jour, estimation du temps restant, traitement par lot (flèches gauche / droite, zoom et avant/après conservés) |
 | 0.9.2 | fonctionnalité | Barre d'onglets native (vrai Liquid Glass d'iOS 26), calcul en arrière-plan (tâche de traitement continu iOS 26, repli CPU), notifications de fin |
+| 0.10.2 | fonctionnalité | Décodage borné en mémoire (ImageIO), progression de la préparation, bouton Réglages si Photos est refusé, date de création conservée dans Photos, notifications au premier plan, version lue depuis le bundle, manifeste de confidentialité, build CI sur les pull request |
 
-Numéro final affiché dans l'app : **0.9.2** (la version de chaque ligne = fonctionnalités cumulées . correctifs cumulés).
+Numéro final affiché dans l'app : **0.10.2** (la version de chaque ligne = fonctionnalités cumulées . correctifs cumulés).
 
 ## Android : 0.4.1 (4 mises à jour de fonctionnalités, 1 correctif)
 
